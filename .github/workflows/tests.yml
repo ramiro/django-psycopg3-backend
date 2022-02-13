@@ -11,6 +11,20 @@ jobs:
   django-tests:
     runs-on: ubuntu-latest
     name: Django Test Suite
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
     steps:
       - name: Checkout psycopg3
         with:
@@ -38,6 +52,6 @@ jobs:
       - name: install the django-psycopg3 backend
         run: pip3 install .
       - name: Copy the test settings file
-        run: cp configs/test_psycopg3.py django_repo/tests/
+        run: cp .github/workflows/test_psycopg3.py django_repo/tests/
       - name: Run the tests
         run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2
