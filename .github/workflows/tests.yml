@@ -67,12 +67,7 @@ jobs:
           cd django_repo/tests/
           pip3 install -e ..
           pip3 install -r requirements/py3.txt
-      #- name: Install Django and its Python test dependencies
-      #  run: |
-      #    cd django_repo/tests/
-      #    pip3 install -e ..
-      #    pip3 install -r requirements/py3.txt
-      #    pip3 install -r requirements/postgres.txt
+          pip3 install -r requirements/postgres.txt
       - name: install the django-psycopg3 backend
         run: pip3 install .
       - name: Copy the test settings file
