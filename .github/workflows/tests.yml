@@ -26,17 +26,17 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
     steps:
-      #- name: Checkout psycopg3
-      #  with:
-      #    repository: 'psycopg/psycopg'
-      #    ref: 'master'
-      #    path: 'psycopg3_repo'
-      #  uses: actions/checkout@v2
+      - name: Checkout psycopg3
+        with:
+          repository: 'psycopg/psycopg'
+          ref: 'master'
+          path: 'psycopg3_repo'
+        uses: actions/checkout@v2
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      #- name: Checkout Django
+      #- name: Checkout Django with my rebased changes
       #  uses: actions/checkout@v2
       #  with:
       #    repository: 'ramiro/django'
@@ -44,42 +44,42 @@ jobs:
       #    path: 'django_repo'
       #
 
-      #- name: Checkout Django
-      #  uses: actions/checkout@v2
-      #  with:
-      #    repository: 'dvarrazzo/django'
-      #    ref: 'psycopg3-4.1'
-      #    path: 'django_repo'
-
-      - name: Checkout Django
+      - name: Checkout Django with Daniel's changes
         uses: actions/checkout@v2
         with:
-          repository: 'django/django'
-          ref: 'main'
+          repository: 'dvarrazzo/django'
+          ref: 'psycopg3-4.1'
           path: 'django_repo'
+
+      #- name: Checkout upstream Django
+      #  uses: actions/checkout@v2
+      #  with:
+      #    repository: 'django/django'
+      #    ref: 'main'
+      #    path: 'django_repo'
 
       - name: Install system packages for Django's Python test dependencies
         run: |
           sudo apt-get update
           sudo apt-get install libmemcached-dev
-      #- name: Install Django and its Python test dependencies
-      #  run: |
-      #    cd django_repo/tests/
-      #    pip3 install -e ..
-      #    pip3 install -r requirements/py3.txt
       - name: Install Django and its Python test dependencies
         run: |
           cd django_repo/tests/
           pip3 install -e ..
           pip3 install -r requirements/py3.txt
-          pip3 install -r requirements/postgres.txt
-      #- name: install the django-psycopg3 backend
-      #  run: pip3 install .
-      #- name: Copy the test settings file
-      #  run: cp .github/workflows/test_psycopg3.py django_repo/tests/
+      #- name: Install Django and its Python test dependencies
+      #  run: |
+      #    cd django_repo/tests/
+      #    pip3 install -e ..
+      #    pip3 install -r requirements/py3.txt
+      #    pip3 install -r requirements/postgres.txt
+      - name: install the django-psycopg3 backend
+        run: pip3 install .
       - name: Copy the test settings file
-        run: cp .github/workflows/test_psycopg2.py django_repo/tests/
-      #- name: Run the tests
-      #  run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2
-      - name: Run the test2
-        run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1
+        run: cp .github/workflows/test_psycopg3.py django_repo/tests/
+      #- name: Copy the test settings file
+      #  run: cp .github/workflows/test_psycopg2.py django_repo/tests/
+      - name: Run the tests
+        run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1
+      #- name: Run the test with psycopg2
+      #  run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1
