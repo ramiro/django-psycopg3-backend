@@ -37,7 +37,8 @@ jobs:
       - name: Checkout Django
         uses: actions/checkout@v2
         with:
-          repository: 'ramiro/django'
+          #repository: 'ramiro/django'
+          repository: 'dvarrazzo/django'
           ref: 'psycopg3-4.1'
           path: 'django_repo'
       - name: Install system packages for Django's Python test dependencies
