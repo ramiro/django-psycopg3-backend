@@ -7,12 +7,14 @@ DATABASES = {
         # "NAME": "django",
         "NAME": "postgres",
         "USER": "postgres",
+        "PASSWORD": "postgres",
     },
     "other": {
         "ENGINE": "django_psycopg3",
         "HOST": "localhost",
         "NAME": "django2",
         "USER": "postgres",
+        "PASSWORD": "postgres",
     },
 }
 
