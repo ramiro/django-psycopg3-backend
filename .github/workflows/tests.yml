@@ -36,13 +36,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      #- name: Checkout Django with my rebased changes
-      #  uses: actions/checkout@v2
-      #  with:
-      #    repository: 'ramiro/django'
-      #    ref: 'psycopg3-4.1'
-      #    path: 'django_repo'
-      #
+      - name: Checkout Django with my rebased changes
+        uses: actions/checkout@v2
+        with:
+          repository: 'ramiro/django'
+          ref: 'psycopg3-4.1'
+          path: 'django_repo'
 
       #- name: Checkout Django with Daniele's changes
       #  uses: actions/checkout@v2
@@ -51,13 +50,13 @@ jobs:
       #    ref: 'psycopg3-4.1'
       #    path: 'django_repo'
 
-      - name: Checkout upstream Django
-        uses: actions/checkout@v2
-        with:
-          repository: 'django/django'
-          #ref: 'main'
-          ref: '8b020f2e64f1cbf2b06205a389a13af6623f90ce'
-          path: 'django_repo'
+      #- name: Checkout upstream Django
+      #  uses: actions/checkout@v2
+      #  with:
+      #    repository: 'django/django'
+      #    ref: 'main'
+      #    #ref: '8b020f2e64f1cbf2b06205a389a13af6623f90ce'
+      #    path: 'django_repo'
 
       - name: Install system packages for Django's Python test dependencies
         run: |
