@@ -1,0 +1,43 @@
+name: Tests
+
+on:
+  pull_request:
+    paths:
+      - '**.py'
+      - '!setup.py'
+      - '.github/workflows/tests.yml'
+
+jobs:
+  django-tests:
+    runs-on: ubuntu-latest
+    name: Django Test Suite
+    steps:
+      - name: Checkout psycopg3
+        with:
+          repository: 'psycopg/psycopg'
+          ref: 'master'
+          path: 'psycopg3_repo'
+        uses: actions/checkout@v2
+      - name: Checkout django-psycopg3
+        uses: actions/checkout@v2
+      - name: Checkout Django
+        uses: actions/checkout@v2
+        with:
+          repository: 'ramiro/django'
+          ref: 'psycopg3-4.1'
+          path: 'django_repo'
+      - name: Install system packages for Django's Python test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libmemcached-dev
+      - name: Install Django and its Python test dependencies
+        run: |
+          cd django_repo/tests/
+          pip3 install -e ..
+          pip3 install -r requirements/py3.txt
+      - name: install the django-psycopg3 backend
+        run: pip3 install .
+      - name: Copy the test settings file
+        run: cp configs/test_psycopg3.py django_repo/tests/
+      - name: Run the tests
+        run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2
