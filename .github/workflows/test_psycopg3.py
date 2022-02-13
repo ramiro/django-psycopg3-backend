@@ -5,16 +5,22 @@ DATABASES = {
         "ENGINE": "django_psycopg3",
         "HOST": "localhost",
         # "NAME": "django",
-        "NAME": "postgres",
+        # "NAME": "postgres",
         "USER": "postgres",
         "PASSWORD": "postgres",
+        "TEST": {
+            "NAME": "test_django",
+        },
     },
     "other": {
         "ENGINE": "django_psycopg3",
         "HOST": "localhost",
-        "NAME": "django2",
+        # "NAME": "django2",
         "USER": "postgres",
         "PASSWORD": "postgres",
+        "TEST": {
+            "NAME": "test_other",
+        },
     },
 }
 
