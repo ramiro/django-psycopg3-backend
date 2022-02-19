@@ -11,9 +11,13 @@ jobs:
   django-tests:
     runs-on: ubuntu-latest
     name: Django Test Suite
+    strategy:
+      fail-fast: false
+      matrix:
+        pgver: [10, latest]
     services:
       postgres:
-        image: postgres
+        image: postgres:${{ matrix.pgver }}
         env:
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
