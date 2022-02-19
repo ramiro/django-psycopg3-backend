@@ -78,7 +78,7 @@ jobs:
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
       - name: Run the tests
-        #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1
+        #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
         run: >
           python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
           admin_changelist.tests.ChangeListTests
@@ -94,5 +94,3 @@ jobs:
           annotations.tests.NonAggregateAnnotationTestCase
           migrations.test_operations.OperationTests
           fixtures.tests.FixtureLoadingTests
-      #- name: Run the test with psycopg2
-      #  run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1
