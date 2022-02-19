@@ -15,6 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         pgver: [10, latest]
+        dbapidriver: [psycopg2, psycopg3]
     services:
       postgres:
         image: postgres:${{ matrix.pgver }}
@@ -74,14 +75,12 @@ jobs:
           pip3 install -r requirements/postgres.txt
       - name: install the django-psycopg3 backend
         run: pip3 install .
-      - name: Copy the test settings file
-        run: cp .github/workflows/test_psycopg3.py django_repo/tests/
-      #- name: Copy the test settings file
-      #  run: cp .github/workflows/test_psycopg2.py django_repo/tests/
+      - name: Copy test settings files
+        run: cp .github/workflows/test_psycopg*.py django_repo/tests/
       - name: Run the tests
         #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1
         run: >
-          python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1
+          python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
           admin_changelist.tests.ChangeListTests
           aggregation.tests.AggregateTestCase
           m2m_recursive.tests.RecursiveM2MTests
