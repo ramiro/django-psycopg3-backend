@@ -33,12 +33,12 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
-      with:
-        ## limits ssh access and adds the ssh public key for the user which triggered the workflow
-        limit-access-to-actor: true
+      - uses: actions/checkout@v2
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        with:
+          ## limits ssh access and adds the ssh public key for the user which triggered the workflow
+          limit-access-to-actor: true
       - name: Checkout psycopg3
         with:
           repository: 'psycopg/psycopg'
