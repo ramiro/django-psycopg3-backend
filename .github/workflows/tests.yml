@@ -14,10 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #pgver: [10, latest]
-        pgver: [latest]
-        #dbapidriver: [psycopg2, psycopg3]
-        dbapidriver: [psycopg3]
+        pgver: [10, latest]
+        #pgver: [latest]
+        dbapidriver: [psycopg2, psycopg3]
+        #dbapidriver: [psycopg3]
     services:
       postgres:
         image: postgres:${{ matrix.pgver }}
@@ -34,6 +34,7 @@ jobs:
           - 5432:5432
     steps:
       - name: Checkout psycopg3
+        if: ${{ matrix.dbapidriver == 'psycopg3' }}
         with:
           repository: 'psycopg/psycopg'
           ref: 'master'
@@ -76,29 +77,30 @@ jobs:
           pip3 install -r requirements/py3.txt
           pip3 install -r requirements/postgres.txt
       - name: install the django-psycopg3 backend
+        if: ${{ matrix.dbapidriver == 'psycopg3' }}
         run: pip3 install .
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        #with:
-        #  ## limits ssh access and adds the ssh public key for the user which triggered the workflow
-        #  limit-access-to-actor: true
-      #- name: Run the tests
-      #  #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
-      #  #run: >
-      #  #  python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
-      #  #  admin_changelist.tests.ChangeListTests
-      #  #  aggregation.tests.AggregateTestCase
-      #  #  m2m_recursive.tests.RecursiveM2MTests
-      #  #  aggregation_regress.tests.AggregationTests
-      #  #  fixtures_regress.tests.TestFixtures
-      #  #  many_to_many.tests.ManyToManyTests
-      #  #  postgres_tests.test_bulk_update.BulkSaveTests
-      #  #  postgres_tests.test_hstore.SimpleTests
-      #  #  postgres_tests.test_hstore.TestQuerying
-      #  #  bulk_create.tests.BulkCreateTests
-      #  #  annotations.tests.NonAggregateAnnotationTestCase
-      #  #  migrations.test_operations.OperationTests
-      #  #  fixtures.tests.FixtureLoadingTests
-      #  run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1 many_to_many.tests.ManyToManyTests.test_add
+      #- name: Setup upterm session
+      #  uses: lhotari/action-upterm@v1
+      #  #with:
+      #  #  ## limits ssh access and adds the ssh public key for the user which triggered the workflow
+      #  #  limit-access-to-actor: true
+      - name: Run the tests
+        #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
+        run: >
+          python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
+          admin_changelist.tests.ChangeListTests
+          aggregation.tests.AggregateTestCase
+          m2m_recursive.tests.RecursiveM2MTests
+          aggregation_regress.tests.AggregationTests
+          fixtures_regress.tests.TestFixtures
+          many_to_many.tests.ManyToManyTests
+          postgres_tests.test_bulk_update.BulkSaveTests
+          postgres_tests.test_hstore.SimpleTests
+          postgres_tests.test_hstore.TestQuerying
+          bulk_create.tests.BulkCreateTests
+          annotations.tests.NonAggregateAnnotationTestCase
+          migrations.test_operations.OperationTests
+          fixtures.tests.FixtureLoadingTests
+        #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1 many_to_many.tests.ManyToManyTests.test_add
