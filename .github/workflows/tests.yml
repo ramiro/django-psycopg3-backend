@@ -79,7 +79,6 @@ jobs:
         run: pip3 install .
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
-      - uses: actions/checkout@v2
       - name: Setup upterm session
         uses: lhotari/action-upterm@v1
         #with:
