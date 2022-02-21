@@ -48,7 +48,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'ramiro/django'
-          ref: 'psycopg3-4.1'
+          #ref: 'psycopg3-4.1'
+          ref: 'a771cfdf2515ad7968ce8d8033b75316dd527677'
           path: 'django_repo'
 
       - name: Install system packages for Django's Python test dependencies
