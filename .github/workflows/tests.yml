@@ -14,8 +14,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pgver: [10, latest]
-        dbapidriver: [psycopg2, psycopg3]
+        #pgver: [10, latest]
+        pgver: [latest]
+        #dbapidriver: [psycopg2, psycopg3]
+        dbapidriver: [psycopg3]
     services:
       postgres:
         image: postgres:${{ matrix.pgver }}
