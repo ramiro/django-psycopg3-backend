@@ -90,6 +90,7 @@ jobs:
         run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1 --keepdb many_to_many.tests.ManyToManyTests.test_add
 
       - name: Run the tests with psycopg3
+        continue-on-error: true
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
         #run: >
         #  python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
