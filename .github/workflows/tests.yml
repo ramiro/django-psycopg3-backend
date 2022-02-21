@@ -87,7 +87,7 @@ jobs:
         #  annotations.tests.NonAggregateAnnotationTestCase
         #  migrations.test_operations.OperationTests
         #  fixtures.tests.FixtureLoadingTests
-        run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1 --keepdb many_to_many.tests.ManyToManyTests.test_add
+        run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1 --keepdb --dqbug-sql many_to_many.tests.ManyToManyTests.test_add
 
       - name: Run the tests with psycopg3
         continue-on-error: true
@@ -107,7 +107,7 @@ jobs:
         #  annotations.tests.NonAggregateAnnotationTestCase
         #  migrations.test_operations.OperationTests
         #  fixtures.tests.FixtureLoadingTests
-        run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1 --keepdb many_to_many.tests.ManyToManyTests.test_add
+        run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1 --keepdb --dqbug-sql many_to_many.tests.ManyToManyTests.test_add
 
       - name: Setup upterm session
         uses: lhotari/action-upterm@v1
