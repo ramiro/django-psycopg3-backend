@@ -9,7 +9,7 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": "postgres",
         "TEST": {
-            "NAME": "test_django",
+            "NAME": "test_a2",
         },
     },
     "other": {
@@ -19,7 +19,7 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": "postgres",
         "TEST": {
-            "NAME": "test_other",
+            "NAME": "test_b2",
         },
     },
 }
