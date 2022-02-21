@@ -1,0 +1,72 @@
+name: Tests
+
+on:
+  pull_request:
+    paths:
+      - '**.py'
+      - '!setup.py'
+      - '.github/workflows/tests.yml'
+
+jobs:
+  django-tests:
+    runs-on: ubuntu-latest
+    name: Django Test Suite
+    strategy:
+      fail-fast: false
+      matrix:
+        pgver: [10, latest]
+        dbapidriver: [psycopg2, psycopg3]
+    services:
+      postgres:
+        image: postgres:${{ matrix.pgver }}
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      - name: Checkout psycopg3
+        if: ${{ matrix.dbapidriver == 'psycopg3' }}
+        with:
+          repository: 'psycopg/psycopg'
+          ref: 'master'
+          path: 'psycopg3_repo'
+        uses: actions/checkout@v2
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkout Django with my rebased changes
+        uses: actions/checkout@v2
+        with:
+          repository: 'ramiro/django'
+          ref: 'psycopg3-4.1'
+          path: 'django_repo'
+
+      - name: Install system packages for Django's Python test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libmemcached-dev
+
+      - name: Install Django and its Python test dependencies
+        run: |
+          cd django_repo/tests/
+          pip3 install -e ..
+          pip3 install -r requirements/py3.txt
+          pip3 install -r requirements/postgres.txt
+
+      - name: install the django-psycopg3 backend
+        if: ${{ matrix.dbapidriver == 'psycopg3' }}
+        run: pip3 install .
+
+      - name: Copy test settings files
+        run: cp .github/workflows/test_psycopg*.py django_repo/tests/
+
+      - name: Run the tests
+        run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
