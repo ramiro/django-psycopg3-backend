@@ -60,7 +60,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('django_repo/tests/requirements/py3.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('django_repo/tests/requirements/py3.txt', 'django_repo/tests/requirements/postgres.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
