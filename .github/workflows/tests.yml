@@ -69,6 +69,11 @@ jobs:
           cd django_repo/tests/
           pip3 install -e ..
           pip3 install -r requirements/py3.txt
+
+      - name: Install psycopg2
+        #if: ${{ matrix.dbapidriver == 'psycopg2' }}
+        run: |
+          cd django_repo/tests/
           pip3 install -r requirements/postgres.txt
 
       - name: install the django-psycopg3 backend
@@ -77,6 +82,9 @@ jobs:
 
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
+
+      - name: install unittest-xml-reporting
+        run: pip3 install unittest-xml-reporting
 
       - name: Run the tests with psycopg2
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
@@ -131,3 +139,13 @@ jobs:
       #  #with:
       #  #  ## limits ssh access and adds the ssh public key for the user which triggered the workflow
       #  #  limit-access-to-actor: true
+
+      - name: XUnit Viewer
+        id: xunit-viewer
+        uses: AutoModality/action-xunit-viewer@v1  
+
+      - name: Attach the report
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ steps.xunit-viewer.outputs.report-name }}
+          path: ${{ steps.xunit-viewer.outputs.report-dir }}

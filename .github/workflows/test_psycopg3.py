@@ -38,3 +38,6 @@ PASSWORD_HASHERS = [
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 USE_TZ = False
+
+TEST_RUNNER = "xmlrunner.extra.djangotestrunner.XMLTestRunner"
+TEST_OUTPUT_DIR = "test-reports"
