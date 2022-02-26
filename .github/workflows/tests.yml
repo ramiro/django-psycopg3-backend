@@ -76,14 +76,14 @@ jobs:
           cd django_repo/tests/
           pip3 install -r requirements/postgres.txt
 
-      - name: install the django-psycopg3 backend
+      - name: Install the django-psycopg3 backend
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
         run: pip3 install .
 
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
 
-      - name: install unittest-xml-reporting
+      - name: Install unittest-xml-reporting
         run: pip3 install unittest-xml-reporting
 
       - name: Run the tests with psycopg2
@@ -129,7 +129,7 @@ jobs:
         #  fixtures.tests.FixtureLoadingTests
         #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
         run: >
-          python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 3 --parallel=1
+          python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
           postgres_tests.test_bulk_update.BulkSaveTests
           postgres_tests.test_hstore.SimpleTests
           postgres_tests.test_hstore.TestQuerying
@@ -145,6 +145,7 @@ jobs:
         uses: AutoModality/action-xunit-viewer@v1  
 
       - name: Attach the report
+        if: always()
         uses: actions/upload-artifact@v1
         with:
           name: ${{ steps.xunit-viewer.outputs.report-name }}
