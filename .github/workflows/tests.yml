@@ -128,8 +128,8 @@ jobs:
         #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
         run: >
           python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
-          postgres_tests.test_bulk_update.BulkSaveTests
-          postgres_tests.test_hstore.SimpleTests
+          --bisect postgres_tests.test_bulk_update.BulkSaveTests
+          #postgres_tests.test_hstore.SimpleTests
           #postgres_tests.test_hstore.TestQuerying
         #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
 
@@ -139,13 +139,13 @@ jobs:
       #  #  ## limits ssh access and adds the ssh public key for the user which triggered the workflow
       #  #  limit-access-to-actor: true
 
-      - name: XUnit Viewer
-        id: xunit-viewer
-        uses: AutoModality/action-xunit-viewer@v1  
+      #- name: XUnit Viewer
+      #  id: xunit-viewer
+      #  uses: AutoModality/action-xunit-viewer@v1  
 
-      - name: Attach the report
-        if: always()
-        uses: actions/upload-artifact@v1
-        with:
-          name: ${{ steps.xunit-viewer.outputs.report-name }}
-          path: ${{ steps.xunit-viewer.outputs.report-dir }}
+      #- name: Attach the report
+      #  if: always()
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #    name: ${{ steps.xunit-viewer.outputs.report-name }}
+      #    path: ${{ steps.xunit-viewer.outputs.report-dir }}
