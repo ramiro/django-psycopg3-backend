@@ -126,12 +126,12 @@ jobs:
         #  migrations.test_operations.OperationTests
         #  fixtures.tests.FixtureLoadingTests
         #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
-        #run: >
-        #  python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
-        #  postgres_tests.test_bulk_update.BulkSaveTests
-        #  postgres_tests.test_hstore.SimpleTests
-        #  postgres_tests.test_hstore.TestQuerying
-        run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
+        run: >
+          python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
+          postgres_tests.test_bulk_update.BulkSaveTests
+          postgres_tests.test_hstore.SimpleTests
+          postgres_tests.test_hstore.TestQuerying
+        #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
 
       #- name: Setup upterm session
       #  uses: lhotari/action-upterm@v1
