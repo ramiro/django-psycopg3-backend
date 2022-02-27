@@ -100,7 +100,7 @@ jobs:
           many_to_many.tests.ManyToManyTests
           postgres_tests.test_bulk_update.BulkSaveTests
           postgres_tests.test_hstore.SimpleTests
-          postgres_tests.test_hstore.TestQuerying
+          #postgres_tests.test_hstore.TestQuerying
           bulk_create.tests.BulkCreateTests
           annotations.tests.NonAggregateAnnotationTestCase
           migrations.test_operations.OperationTests
