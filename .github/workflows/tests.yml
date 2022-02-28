@@ -79,7 +79,7 @@ jobs:
       - name: Install psycopg3 master
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
         run: |
-          cd psycopg3_repo
+          cd ../../psycopg3_repo
           pip3 install -e ./psycopg
 
       - name: Install the django-psycopg3 backend
