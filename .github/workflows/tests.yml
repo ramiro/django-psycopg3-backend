@@ -33,6 +33,9 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Checkout psycopg3
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
         uses: actions/checkout@v2
@@ -40,9 +43,6 @@ jobs:
           repository: 'psycopg/psycopg'
           ref: 'master'
           path: 'psycopg3_repo'
-
-      - name: Checkout
-        uses: actions/checkout@v2
 
       - name: Checkout Django with my rebased changes
         uses: actions/checkout@v2
@@ -79,6 +79,7 @@ jobs:
       - name: Install psycopg3 master
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
         run: |
+          pwd
           ls -lap
         #cd ../../psycopg3_repo
         #pip3 install -e ./psycopg
