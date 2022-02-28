@@ -35,11 +35,11 @@ jobs:
     steps:
       - name: Checkout psycopg3
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
+        uses: actions/checkout@v2
         with:
           repository: 'psycopg/psycopg'
           ref: 'master'
           path: 'psycopg3_repo'
-        uses: actions/checkout@v2
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -80,7 +80,7 @@ jobs:
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
         run: |
           cd psycopg3_repo
-          pip3 install -e .
+          pip3 install -e ./psycopg
 
       - name: Install the django-psycopg3 backend
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
