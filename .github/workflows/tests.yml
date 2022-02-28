@@ -76,6 +76,12 @@ jobs:
           cd django_repo/tests/
           pip3 install -r requirements/postgres.txt
 
+      - name: Install psycopg3 master
+        #if: ${{ matrix.dbapidriver == 'psycopg3' }}
+        run: |
+          cd psycopg3_repo
+          pip3 install -e .
+
       - name: Install the django-psycopg3 backend
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
         run: pip3 install .
