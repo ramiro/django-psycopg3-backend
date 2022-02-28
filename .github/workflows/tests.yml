@@ -83,8 +83,8 @@ jobs:
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
 
-      - name: Install unittest-xml-reporting
-        run: pip3 install unittest-xml-reporting
+      #- name: Install unittest-xml-reporting
+      #  run: pip3 install unittest-xml-reporting
 
       - name: Run the tests with psycopg2
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
