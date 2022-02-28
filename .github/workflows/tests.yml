@@ -81,10 +81,15 @@ jobs:
         run: |
           cd psycopg3_repo
           sudo pip3 install -e ./psycopg
+          pip3 show psycopg
 
       - name: Install the django-psycopg3 backend
         #if: ${{ matrix.dbapidriver == 'psycopg3' }}
-        run: pip3 install .
+        #run: pip3 install .
+        run: |
+          pip3 show psycopg
+          pip3 install .
+          pip3 show psycopg
 
       - name: Copy test settings files
         run: cp .github/workflows/test_psycopg*.py django_repo/tests/
