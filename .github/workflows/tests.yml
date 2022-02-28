@@ -127,7 +127,7 @@ jobs:
         #  fixtures.tests.FixtureLoadingTests
         #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
         run: >
-          python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
+          python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 3 --parallel=1 --debug-sql
           basic.tests.ModelInstanceCreationTests.test_can_initialize_model_instance_using_positional_arguments
           postgres_tests.test_bulk_update.BulkSaveTests.test_bulk_update
           #postgres_tests.test_hstore.SimpleTests
