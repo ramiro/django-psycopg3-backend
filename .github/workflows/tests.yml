@@ -41,8 +41,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'psycopg/psycopg'
-          #ref: 'master'
-          ref: '7c7fe2af3542fc9537ab0ed6eace6faac15402f9'
+          ref: 'master'
+          #ref: '7c7fe2af3542fc9537ab0ed6eace6faac15402f9'
           path: 'psycopg3_repo'
 
       - name: Checkout Django with my rebased changes
