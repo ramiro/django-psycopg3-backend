@@ -50,7 +50,7 @@ jobs:
         with:
           repository: 'ramiro/django'
           #ref: 'psycopg3-4.1'
-          ref: '83903b70d1e34962ae89404084c5d8800fafa8c4'
+          ref: 'fb787211b6173dad914f36bd98fb709472cf1ad1'
           path: 'django_repo'
 
       - name: Install system packages for Django's Python test dependencies
