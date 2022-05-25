@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #pgver: [10, latest]
+        #pgver: [12, latest]
         pgver: [latest]
         #dbapidriver: [psycopg2, psycopg3]
         #dbapidriver: [psycopg3]
@@ -92,16 +92,16 @@ jobs:
         #  pip3 show psycopg
 
       - name: Copy test settings files
-        run: cp .github/workflows/test_psycopg*.py django_repo/tests/
+        run: cp .github/workflows/settings_psycopg*_tests.py django_repo/tests/
 
       #- name: Install unittest-xml-reporting
       #  run: pip3 install unittest-xml-reporting
 
       - name: Run the tests with psycopg2
-        run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 2 --parallel=1
+        run: python3 django_repo/tests/runtests.py --settings settings_psycopg2_tests -v 2 --parallel=1
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
         #run: >
-        #  python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 1 --parallel=1
+        #  python3 django_repo/tests/runtests.py --settings settings_psycopg2_tests -v 1 --parallel=1
         #  admin_changelist.tests.ChangeListTests
         #  aggregation.tests.AggregateTestCase
         #  m2m_recursive.tests.RecursiveM2MTests
@@ -115,14 +115,14 @@ jobs:
         #  annotations.tests.NonAggregateAnnotationTestCase
         #  migrations.test_operations.OperationTests
         #  fixtures.tests.FixtureLoadingTests
-        #run: python3 django_repo/tests/runtests.py --settings test_psycopg2 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg2_tests -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
 
       - name: Run the tests with psycopg3
         continue-on-error: true
-        run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1
+        run: python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 2 --parallel=1
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
         #run: >
-        #  python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 1 --parallel=1
+        #  python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 1 --parallel=1
         #  admin_changelist.tests.ChangeListTests
         #  aggregation.tests.AggregateTestCase
         #  m2m_recursive.tests.RecursiveM2MTests
@@ -137,10 +137,10 @@ jobs:
         #  migrations.test_operations.OperationTests
         #  fixtures.tests.FixtureLoadingTests
         #run: >
-        #  python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1 --debug-sql
+        #  python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 2 --parallel=1 --debug-sql
         #  basic.tests.ModelInstanceCreationTests.test_can_initialize_model_instance_using_positional_arguments
         #  postgres_tests.test_bulk_update.BulkSaveTests.test_bulk_update
-        #run: python3 django_repo/tests/runtests.py --settings test_psycopg3 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
 
       #- name: Setup upterm session
       #  uses: lhotari/action-upterm@v1
