@@ -50,7 +50,8 @@ jobs:
         with:
           repository: 'ramiro/django'
           #ref: 'psycopg3-4.1'
-          ref: 'fb787211b6173dad914f36bd98fb709472cf1ad1'
+          #ref: 'fb787211b6173dad914f36bd98fb709472cf1ad1'
+          ref: 'b011220d80ed770484765ae780194551fdcb601a'
           path: 'django_repo'
 
       - name: Install system packages for Django's Python test dependencies
@@ -98,7 +99,8 @@ jobs:
       #  run: pip3 install unittest-xml-reporting
 
       - name: Run the tests with psycopg2
-        run: python3 django_repo/tests/runtests.py --settings settings_psycopg2_tests -v 2 --parallel=1
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg2_tests -v 2 --parallel=1
+        run: true
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
         #run: >
         #  python3 django_repo/tests/runtests.py --settings settings_psycopg2_tests -v 1 --parallel=1
@@ -119,7 +121,12 @@ jobs:
 
       - name: Run the tests with psycopg3
         continue-on-error: true
-        run: python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 2 --parallel=1
+        run: >
+          python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 1 --parallel=1
+          postgres_tests.test_bulk_update.BulkSaveTests
+          postgres_tests.test_hstore.SimpleTests
+          postgres_tests.test_hstore.TestQuerying
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 2 --parallel=1
         #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
         #run: >
         #  python3 django_repo/tests/runtests.py --settings settings_psycopg3_tests -v 1 --parallel=1
