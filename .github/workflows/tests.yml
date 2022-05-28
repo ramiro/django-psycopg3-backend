@@ -1,0 +1,166 @@
+name: Tests
+
+on:
+  pull_request:
+    paths:
+      - '**.py'
+      - '!setup.py'
+      - '.github/workflows/tests.yml'
+
+jobs:
+  django-tests:
+    runs-on: ubuntu-latest
+    name: Django Test Suite
+    strategy:
+      fail-fast: false
+      matrix:
+        #pgver: [12, latest]
+        pgver: [latest]
+        #dbapidriver: [psycopg2, psycopg3]
+        #dbapidriver: [psycopg3]
+    services:
+      postgres:
+        image: postgres:${{ matrix.pgver }}
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+        --health-cmd pg_isready -U postgres
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+      ports:
+        # Maps tcp port 5432 on service container to the host
+        - 5432:5432
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Checkout psycopg3
+      #if: ${{ matrix.dbapidriver == 'psycopg3' }}
+      uses: actions/checkout@v2
+      with:
+        repository: 'psycopg/psycopg'
+        ref: 'master'
+        #ref: '7c7fe2af3542fc9537ab0ed6eace6faac15402f9'
+        path: 'psycopg3_repo'
+
+      - name: Checkout Django with my rebased changes
+        uses: actions/checkout@v2
+        with:
+          repository: 'ramiro/django'
+          #ref: 'psycopg3-4.1'
+          #ref: 'fb787211b6173dad914f36bd98fb709472cf1ad1'
+          ref: 'b011220d80ed770484765ae780194551fdcb601a'
+          path: 'django_repo'
+
+      - name: Install system packages for Django's Python test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libmemcached-dev
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('django_repo/tests/requirements/py3.txt', 'django_repo/tests/requirements/postgres.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Django and its Python test dependencies
+        run: |
+          cd django_repo/tests/
+          pip3 install -e ..
+          pip3 install -r requirements/py3.txt
+
+      - name: Install psycopg2
+        #if: ${{ matrix.dbapidriver == 'psycopg2' }}
+        run: |
+          cd django_repo/tests/
+          pip3 install -r requirements/postgres.txt
+
+      #- name: Install psycopg3 master
+      #  #if: ${{ matrix.dbapidriver == 'psycopg3' }}
+      #  run: |
+      #    cd psycopg3_repo
+      #    sudo pip3 install -e ./psycopg
+
+      - name: Install the django-psycopg3 backend
+        #if: ${{ matrix.dbapidriver == 'psycopg3' }}
+        run: pip3 install .
+        #run: |
+        #  pip3 show psycopg
+        #  pip3 install .
+        #  pip3 show psycopg
+
+      - name: Copy test settings files
+        run: cp .github/workflows/settings_psycopg*.py django_repo/tests/
+
+      #- name: Install unittest-xml-reporting
+      #  run: pip3 install unittest-xml-reporting
+
+      - name: Run the tests with psycopg2
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg2 -v 2 --parallel=1
+        run: true
+        #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
+        #run: >
+        #  python3 django_repo/tests/runtests.py --settings settings_psycopg2 -v 1 --parallel=1
+        #  admin_changelist.tests.ChangeListTests
+        #  aggregation.tests.AggregateTestCase
+        #  m2m_recursive.tests.RecursiveM2MTests
+        #  aggregation_regress.tests.AggregationTests
+        #  fixtures_regress.tests.TestFixtures
+        #  many_to_many.tests.ManyToManyTests
+        #  postgres_tests.test_bulk_update.BulkSaveTests
+        #  postgres_tests.test_hstore.SimpleTests
+        #  #postgres_tests.test_hstore.TestQuerying
+        #  bulk_create.tests.BulkCreateTests
+        #  annotations.tests.NonAggregateAnnotationTestCase
+        #  migrations.test_operations.OperationTests
+        #  fixtures.tests.FixtureLoadingTests
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg2 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
+
+      - name: Run the tests with psycopg3
+        continue-on-error: true
+        run: >
+          python3 django_repo/tests/runtests.py --settings settings_psycopg3 -v 2 --parallel=1
+          postgres_tests.test_hstore.TestQuerying
+          postgres_tests.test_hstore.SimpleTests
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg3 -v 2 --parallel=1
+        #run: python3 django_repo/tests/runtests.py --settings test_${{ matrix.dbapidriver }} -v 1 --parallel=1
+        #run: >
+        #  python3 django_repo/tests/runtests.py --settings settings_psycopg3 -v 1 --parallel=1
+        #  admin_changelist.tests.ChangeListTests
+        #  aggregation.tests.AggregateTestCase
+        #  m2m_recursive.tests.RecursiveM2MTests
+        #  aggregation_regress.tests.AggregationTests
+        #  fixtures_regress.tests.TestFixtures
+        #  many_to_many.tests.ManyToManyTests
+        #  postgres_tests.test_bulk_update.BulkSaveTests
+        #  postgres_tests.test_hstore.SimpleTests
+        #  postgres_tests.test_hstore.TestQuerying
+        #  bulk_create.tests.BulkCreateTests
+        #  annotations.tests.NonAggregateAnnotationTestCase
+        #  migrations.test_operations.OperationTests
+        #  fixtures.tests.FixtureLoadingTests
+        #run: >
+        #  python3 django_repo/tests/runtests.py --settings settings_psycopg3 -v 2 --parallel=1 --debug-sql
+        #  basic.tests.ModelInstanceCreationTests.test_can_initialize_model_instance_using_positional_arguments
+        #  postgres_tests.test_bulk_update.BulkSaveTests.test_bulk_update
+        #run: python3 django_repo/tests/runtests.py --settings settings_psycopg3 -v 2 --parallel=1 --keepdb --debug-sql many_to_many.tests.ManyToManyTests.test_add
+
+      #- name: Setup upterm session
+      #  uses: lhotari/action-upterm@v1
+      #  #with:
+      #  #  ## limits ssh access and adds the ssh public key for the user which triggered the workflow
+      #  #  limit-access-to-actor: true
+
+      #- name: XUnit Viewer
+      #  id: xunit-viewer
+      #  uses: AutoModality/action-xunit-viewer@v1  
+
+      #- name: Attach the report
+      #  if: always()
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #    name: ${{ steps.xunit-viewer.outputs.report-name }}
+      #    path: ${{ steps.xunit-viewer.outputs.report-dir }}
